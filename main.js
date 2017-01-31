@@ -18,26 +18,12 @@ app.main  = (function() {
     elements.noteSubmit.addEventListener('click', function(event) {
       event.preventDefault();
         var fieldValue = elements.noteField.value;
-
-        var newNote = new Model(fieldValue, notes);
-        // var cont = new Controller();
-        // cont.save(newNote);
+        var newNote = new Model(fieldValue);
         controller.save(newNote);
         new View(newNote, elements.noteList).init();
-        
         elements.noteField.value = '';
-
     });
-
-    // window.addEventListener('hashchange', function(e) {
-    //   e.preventDefault();
-    //   console.log('hash just changed'); 
-    //   //app.router.route();
-    // });
-
   };
-
-  
 
   var addAsFirstChild = function(parent, child) {
     var parentNode = parent,
@@ -47,10 +33,9 @@ app.main  = (function() {
     } else {
       parentNode.appendChild(child);
     }
-
   };
 
-  var View = function(note, containerEl) {
+  var View = function(note) {
     
     var index = notes.indexOf(note),
         that = this;
@@ -66,6 +51,11 @@ app.main  = (function() {
       this.actions.classList.add('actions');
       this.removeButton.classList.add('remove' ,'icon-cancel');
       this.likeButton.classList.add('like' ,'icon-heart');
+
+      if(note.liked === true)
+      {
+        this.likeButton.classList.add('liked');
+      }
 
       this.paragraph.innerHTML = note.noteBodyText;
       this.actions.appendChild(this.removeButton);
@@ -120,7 +110,10 @@ app.main  = (function() {
     },
     
     like(note) {
+      var indexToUpdate = notes.indexOf(note);
+
       note.liked = !note.liked;
+      notes.splice(indexToUpdate, 1, note); 
       localStorage.setItem('notes', JSON.stringify(notes));
       console.log('Model says: Am I liked?' , note.liked);
       return this;
@@ -128,7 +121,7 @@ app.main  = (function() {
 
     remove(note) {
       console.log('Model says: I am a goner');
-      notes.splice(notes.indexOf(note), 1);
+      notes.splice(notes.indexOf(note), 1); 
       localStorage.setItem('notes', JSON.stringify(notes));
       return this;
     }
@@ -150,7 +143,7 @@ app.main  = (function() {
         //var savedNote = new Model(fieldValue, notes).save();
         //new View(newNote, elements.noteList).init();
 
-        new View(savedNotes[i], elements.noteList).init();
+        new View(savedNotes[i]).init();
       }
     
     } else {
