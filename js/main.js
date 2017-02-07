@@ -1,10 +1,11 @@
-var app = app || {};
+var app = app || {
+  model : {},
+  view : {},
+  controller : {},
+  notes : []
+};
 
-app.model = {};
-app.view = {};
-app.controller = {};
-
-app.main  = (function() {  
+app.main  = (function() {
 
   var elements = {
     noteField : document.querySelector('.write-note'),
@@ -12,8 +13,6 @@ app.main  = (function() {
     noteList : document.querySelector('.notes'),
     noNotesFound : document.querySelector('.no-notes-found')
   };
-
-  var notes = [];
 
   var attachEvents = function() {
 
@@ -38,28 +37,25 @@ app.main  = (function() {
   };
 
   var initialRender = function() {
-    notes = JSON.parse(localStorage.getItem('notes'));
-    if(notes.length > 0) {
+    app.notes = JSON.parse(localStorage.getItem('notes'));
+    if(app.notes.length > 0) {
       var i = 0,
-      len = notes.length;
+      len = app.notes.length;
       for(i; i < len; i += 1) {
-        new app.view.Note(notes[i]).init();
+        new app.view.Note(app.notes[i]).init();
       }
-    
     } else {
       elements.noNotesFound.classList.remove('hidden'); // if no notes exist in localstorage, show the "you have no notes yer" message
     }
   };
   
   var init = function() {
-    console.log('App init');
     attachEvents();
     initialRender();
   };
   
   return {
     init : init,
-    notes : notes,
     addAsFirstChild : addAsFirstChild,
     elements : elements
   };

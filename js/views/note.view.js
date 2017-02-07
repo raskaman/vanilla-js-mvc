@@ -4,7 +4,7 @@ var app = app || {};
 
   app.view.Note = function(note) {
 
-      var index = app.main.notes.indexOf(note),
+      var index = app.notes.indexOf(note),
           that = this;
 
       this.render = function() {
