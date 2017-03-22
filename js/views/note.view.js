@@ -1,8 +1,7 @@
-var app = app || {};
-
-(function() {
-
-  app.view.Note = function(note) {
+var app = (function(module) {
+  module.view = (function() {
+    
+    function Note(note) {
 
       var index = app.notes.indexOf(note),
           that = this;
@@ -59,7 +58,11 @@ var app = app || {};
         this.attachEvents();
         return this;
       };
-
     };
 
-  })();
+    return {
+      Note: Note
+    };
+  }());
+  return module;
+}(app || {}));
