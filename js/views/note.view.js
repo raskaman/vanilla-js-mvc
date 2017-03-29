@@ -1,68 +1,63 @@
-var app = (function(module) {
-  module.view = (function() {
-    
-    function Note(note) {
+var app = (function (module) {
+	module.view = (function () {
 
-      var index = app.notes.indexOf(note),
-          that = this;
+		function Note(note) {
 
-      this.render = function() {
-        this.listItem = document.createElement('li');
-        this.paragraph = document.createElement('p');
-        this.actions = document.createElement('ul');
-        this.removeButton = document.createElement('li');
-        this.likeButton = document.createElement('li');
+			var that = this;
 
-        this.listItem.classList.add('note');
-        this.actions.classList.add('actions');
-        this.removeButton.classList.add('remove' ,'icon-cancel');
-        this.likeButton.classList.add('like' ,'icon-heart');
+			this.render = function () {
+				this.listItem = document.createElement('li');
+				this.paragraph = document.createElement('p');
+				this.actions = document.createElement('ul');
+				this.removeButton = document.createElement('li');
+				this.likeButton = document.createElement('li');
 
-        if(note.liked === true)
-        {
-          this.likeButton.classList.add('liked');
-        }
+				this.listItem.classList.add('note');
+				this.actions.classList.add('actions');
+				this.removeButton.classList.add('remove', 'icon-cancel');
+				this.likeButton.classList.add('like', 'icon-heart');
 
-        this.paragraph.innerHTML = note.noteBodyText;
-        this.actions.appendChild(this.removeButton);
-        this.actions.appendChild(this.likeButton);
-        this.listItem.appendChild(this.paragraph);
-        this.listItem.appendChild(this.actions);
+				if (note.liked === true) {
+					this.likeButton.classList.add('liked');
+				}
 
-        app.main.addAsFirstChild(app.main.elements.noteList, this.listItem);
+				this.paragraph.innerHTML = note.noteBodyText;
+				this.actions.appendChild(this.removeButton);
+				this.actions.appendChild(this.likeButton);
+				this.listItem.appendChild(this.paragraph);
+				this.listItem.appendChild(this.actions);
 
-        app.main.elements.noNotesFound.classList.add('hidden');
+				app.main.addAsFirstChild(app.main.elements.noteList, this.listItem);
 
-        return this;     
-      };
+				app.main.elements.noNotesFound.classList.add('hidden');
+			};
 
-      this.like = function() {
-        app.controller.note.like(note); // update the "liked" in our Model (data)
-        that.likeButton.classList.toggle('liked'); // update the UI and show a red heart
-      };
+			this.like = function () {
+				app.controller.note.like(note); // update the "liked" in our Model (data)
+				that.likeButton.classList.toggle('liked'); // update the UI and show a red heart
+			};
 
-      this.remove = function() {
-        app.main.elements.noteList.removeChild(that.listItem); // update the UI by removing that list item
-        app.controller.note.remove(note); // update the data by calling the remove method from Model
-        if(app.main.elements.noteList.childElementCount === 0) {
-          app.main.elements.noNotesFound.classList.remove('hidden');  // Show the "you have no notes yet" message, if all the notes are deleted
-        }
-      };
-      this.attachEvents = function() {
-        this.likeButton.addEventListener('click', this.like);
-        this.removeButton.addEventListener('click', this.remove);
-      };
-      
-      this.init = function() {
-        this.render();
-        this.attachEvents();
-        return this;
-      };
-    };
+			this.remove = function () {
+				app.main.elements.noteList.removeChild(that.listItem); // update the UI by removing that list item
+				app.controller.note.remove(note); // update the data by calling the remove method from Model
+				if (app.main.elements.noteList.childElementCount === 0) {
+					app.main.elements.noNotesFound.classList.remove('hidden'); // Show the "you have no notes yet" message, if all the notes are deleted
+				}
+			};
+			this.attachEvents = function () {
+				this.likeButton.addEventListener('click', this.like);
+				this.removeButton.addEventListener('click', this.remove);
+			};
 
-    return {
-      Note: Note
-    };
-  }());
-  return module;
+			this.init = function () {
+				this.render();
+				this.attachEvents();
+			};
+		};
+
+		return {
+			Note: Note
+		};
+	}());
+	return module;
 }(app || {}));
